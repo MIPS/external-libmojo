@@ -107,6 +107,8 @@ for file in "${files[@]}"; do
         "${file}"
   fi
   if [[ "${generators}" =~ .*java.* ]] ; then
-    unzip -qo -d "${output_dir}"/src "${output_dir}/${rel_path}".srcjar
+    # -DD uses current time for the timestamp of the unzipped files so
+    # ninja doesn't think they are out of date and need regenerating
+    unzip -qo -DD -d "${output_dir}"/src "${output_dir}/${rel_path}".srcjar
   fi
 done
