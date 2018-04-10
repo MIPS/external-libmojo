@@ -196,14 +196,7 @@ genrule {
 
     srcs: [
         "base/android/java/src/org/chromium/base/BuildInfo.java",
-        "base/android/java/src/org/chromium/base/ContentUriUtils.java",
         "base/android/java/src/org/chromium/base/ContextUtils.java",
-        "base/android/java/src/org/chromium/base/PathUtils.java",
-        "base/android/java/src/org/chromium/base/SystemMessageHandler.java",
-        // Runtime.class is added (instead of Runtime.java that lives in
-        // libcore) since the script that generates the JNI files does not
-        // handle compiling it well.
-        "jni/java/lang/Runtime.class",
         "mojo/android/system/src/org/chromium/mojo/system/impl/BaseRunLoop.java",
         "mojo/android/system/src/org/chromium/mojo/system/impl/CoreImpl.java",
         "mojo/android/system/src/org/chromium/mojo/system/impl/WatcherImpl.java",
@@ -211,11 +204,7 @@ genrule {
 
     out: [
         "jni/BuildInfo_jni.h",
-        "jni/ContentUriUtils_jni.h",
         "jni/ContextUtils_jni.h",
-        "jni/PathUtils_jni.h",
-        "jni/SystemMessageHandler_jni.h",
-        "jni/Runtime_jni.h",
         "jni/BaseRunLoop_jni.h",
         "jni/CoreImpl_jni.h",
         "jni/WatcherImpl_jni.h",
@@ -241,20 +230,13 @@ cc_library_shared {
 
     srcs: [
         "base/android/build_info.cc",
-        "base/android/content_uri_utils.cc",
         "base/android/context_utils.cc",
-        "base/android/java_runtime.cc",
         "base/android/jni_android.cc",
         "base/android/jni_string.cc",
-        "base/android/path_utils.cc",
         "base/android/scoped_java_ref.cc",
         "base/base_paths.cc",
-        "base/base_paths_android.cc",
-        "base/files/file_util_android.cc",
-        "base/message_loop/message_pump_android.cc",
+        "base/base_paths_posix.cc",
         "base/path_service.cc",
-        "base/trace_event/java_heap_dump_provider_android.cc",
-        "base/trace_event/trace_event_android.cc",
         "base/unguessable_token.cc",
         "device/bluetooth/bluetooth_advertisement.cc",
         "device/bluetooth/bluetooth_uuid.cc",
@@ -369,7 +351,6 @@ cc_library_shared {
         "-DMOJO_EDK_LEGACY_PROTOCOL",
     ],
 
-    // We use OS_POSIX since we need to communicate with Chrome.
     // We also pass NO_ASHMEM to make base::SharedMemory avoid using it and prefer
     // the POSIX versions.
     cppflags: [
@@ -377,9 +358,7 @@ cc_library_shared {
         "-Wno-non-virtual-dtor",
         "-Wno-ignored-qualifiers",
         "-Wno-extra",
-        "-DOS_POSIX",
         "-DNO_ASHMEM",
-        "-DNO_TCMALLOC",
     ],
 
     shared_libs: [

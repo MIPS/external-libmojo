@@ -803,7 +803,7 @@ scoped_refptr<Port> Node::GetPort_Locked(const PortName& port_name) {
   if (iter == ports_.end())
     return nullptr;
 
-#if defined(OS_ANDROID) && defined(ARCH_CPU_ARM64)
+#if (defined(OS_ANDROID) || defined(__ANDROID__)) && defined(ARCH_CPU_ARM64)
   // Workaround for https://crbug.com/665869.
   base::subtle::MemoryBarrier();
 #endif
