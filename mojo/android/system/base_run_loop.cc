@@ -6,9 +6,10 @@
 
 #include <jni.h>
 
-#include "base/android/base_jni_registrar.h"
+// Removed unused headers. TODO(hidehiko): Upstream.
+// #include "base/android/base_jni_registrar.h"
 #include "base/android/jni_android.h"
-#include "base/android/jni_registrar.h"
+// #include "base/android/jni_registrar.h"
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
@@ -79,4 +80,3 @@ bool RegisterBaseRunLoop(JNIEnv* env) {
 
 }  // namespace android
 }  // namespace mojo
-
