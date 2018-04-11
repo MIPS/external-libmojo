@@ -35,7 +35,7 @@ namespace edk {
 
 namespace {
 
-#if defined(OS_ANDROID)
+#if defined(OS_ANDROID) || defined(__ANDROID__)
 enum {
   // Leave room for any other descriptors defined in content for example.
   // TODO(jcivelli): consider changing base::GlobalDescriptors to generate a
@@ -102,7 +102,7 @@ ScopedPlatformHandle
 PlatformChannelPair::PassClientHandleFromParentProcessFromString(
     const std::string& value) {
   int client_fd = -1;
-#if defined(OS_ANDROID)
+#if defined(OS_ANDROID) || defined(__ANDROID__)
   base::GlobalDescriptors::Key key = -1;
   if (value.empty() || !base::StringToUint(value, &key)) {
     LOG(ERROR) << "Missing or invalid --" << kMojoPlatformChannelHandleSwitch;
@@ -142,7 +142,7 @@ void PlatformChannelPair::PrepareToPassClientHandleToChildProcess(
 std::string
 PlatformChannelPair::PrepareToPassClientHandleToChildProcessAsString(
       HandlePassingInformation* handle_passing_info) const {
-#if defined(OS_ANDROID)
+#if defined(OS_ANDROID) || defined(__ANDROID__)
   int fd = client_handle_.get().handle;
   handle_passing_info->push_back(
       std::pair<int, int>(fd, kAndroidClientHandleDescriptor));
