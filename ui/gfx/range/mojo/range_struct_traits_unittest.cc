@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include <utility>
-
 #include "base/message_loop/message_loop.h"
 #include "mojo/public/cpp/bindings/binding_set.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -20,19 +18,18 @@ class RangeStructTraitsTest : public testing::Test,
 
  protected:
   mojom::RangeTraitsTestServicePtr GetTraitsTestProxy() {
-    mojom::RangeTraitsTestServicePtr proxy;
-    traits_test_bindings_.AddBinding(this, mojo::MakeRequest(&proxy));
-    return proxy;
+    return traits_test_bindings_.CreateInterfacePtrAndBind(this);
   }
 
  private:
   // RangeTraitsTestService:
-  void EchoRange(const Range& p, EchoRangeCallback callback) override {
-    std::move(callback).Run(p);
+  void EchoRange(const Range& p, const EchoRangeCallback& callback) override {
+    callback.Run(p);
   }
 
-  void EchoRangeF(const RangeF& p, EchoRangeFCallback callback) override {
-    std::move(callback).Run(p);
+  void EchoRangeF(const RangeF& p,
+                  const EchoRangeFCallback& callback) override {
+    callback.Run(p);
   }
 
   base::MessageLoop loop_;
