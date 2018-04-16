@@ -81,7 +81,8 @@ for arg in "$@"; do
 done
 
 cd "${package}"
-"${mojom_bindings_generator}" precompile -o "${output_dir}"
+"${mojom_bindings_generator}" --use_bundled_pylibs precompile \
+    -o "${output_dir}"
 
 for file in "${files[@]}"; do
   # Java source generations depends on zipfile that assumes the output directory
@@ -95,12 +96,14 @@ for file in "${files[@]}"; do
   # libmojo root directory as part of searchable directory for imports. With
   # this, we can have a mojo file located in some arbitrary directories that
   # imports a mojo file under external/libmojo.
-  "${mojom_bindings_generator}" generate -o "${output_dir}" "${args[@]}" \
+  "${mojom_bindings_generator}" --use_bundled_pylibs generate \
+      -o "${output_dir}" "${args[@]}" \
       --bytecode_path="${bytecode_path}" \
       -I "${private_mojo_root}:${private_mojo_root}" \
       --generators=${generators} "${file}"
   if [[ "${generators}" =~ .*c\+\+.* ]] ; then
-    "${mojom_bindings_generator}" generate -o "${output_dir}" \
+    "${mojom_bindings_generator}" --use_bundled_pylibs generate \
+        -o "${output_dir}" \
         --generate_non_variant_code "${args[@]}" \
         -I "${private_mojo_root}:${private_mojo_root}" \
         --bytecode_path="${bytecode_path}" --generators=${generators} \

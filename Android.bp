@@ -19,12 +19,9 @@ filegroup {
     ],
 }
 
-// TODO(risan): move this to third_party/catapult/Android.bp and enable embedded_launcher.
-python_library_host {
-    name: "catapult",
-    srcs: [
-        "third_party/catapult/devil/devil/**/*.py",
-    ],
+// Python in Chrome repository requires still Python 2.
+python_defaults {
+    name: "libmojo_scripts",
     version: {
         py2: {
             enabled: true,
@@ -35,25 +32,34 @@ python_library_host {
     },
 }
 
-// TODO(risan): split this into python_libraries.
 python_binary_host {
     name: "jni_generator",
     main: "base/android/jni_generator/jni_generator.py",
     srcs: [
         "base/android/jni_generator/jni_generator.py",
         "build/**/*.py",
+        "third_party/catapult/devil/devil/**/*.py",
     ],
-    version: {
-        py2: {
-            enabled: true,
-        },
-        py3: {
-            enabled: false,
-        },
-    },
-    libs: [
-        "catapult",
+    defaults: ["libmojo_scripts"],
+}
+
+python_binary_host {
+    name: "mojom_bindings_generator",
+    main: "mojo/public/tools/bindings/mojom_bindings_generator.py",
+    srcs: [
+        "mojo/public/tools/bindings/**/*.py",
+        "build/**/*.py",
+        "third_party/catapult/devil/**/*.py",
+        "third_party/jinja2/**/*.py",
+        "third_party/markupsafe/**/*.py",
+        "third_party/ply/**/*.py",
     ],
+    data: [
+        "mojo/public/tools/bindings/generators/cpp_templates/*.tmpl",
+        "mojo/public/tools/bindings/generators/java_templates/*.tmpl",
+        "mojo/public/tools/bindings/generators/js_templates/*.tmpl",
+    ],
+    defaults: ["libmojo_scripts"],
 }
 
 cc_prebuilt_binary {
